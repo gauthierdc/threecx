@@ -1,0 +1,239 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-11-14 17:00:00.000000",
+ "custom": 0,
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "erp_url",
+  "pbx_section",
+  "pbx_url",
+  "pbx_version",
+  "pbx_column_break",
+  "client_id",
+  "client_secret",
+  "crm_section",
+  "match_digits",
+  "lookup_contacts",
+  "lookup_leads",
+  "contact_url_target",
+  "crm_column_break",
+  "allow_contact_creation",
+  "log_calls",
+  "log_unmatched_calls",
+  "log_chats",
+  "click_section",
+  "click_to_call_mode",
+  "click_column_break",
+  "call_timeout",
+  "notify_section",
+  "notify_incoming_calls",
+  "sync_section",
+  "xapi_sync_enabled",
+  "sync_lookback_hours",
+  "sync_column_break",
+  "last_sync"
+ ],
+ "fields": [
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Activé",
+   "default": "0"
+  },
+  {
+   "fieldname": "erp_url",
+   "fieldtype": "Data",
+   "label": "URL de l'ERP",
+   "options": "URL",
+   "description": "URL publique de l'ERP, joignable par le serveur 3CX et par les postes (ex. https://erp.mondomaine.fr). Vide = URL du site."
+  },
+  {
+   "fieldname": "pbx_section",
+   "fieldtype": "Section Break",
+   "label": "Serveur 3CX"
+  },
+  {
+   "fieldname": "pbx_url",
+   "fieldtype": "Data",
+   "label": "URL du PBX 3CX",
+   "options": "URL",
+   "description": "Ex. https://monentreprise.3cx.fr"
+  },
+  {
+   "fieldname": "pbx_version",
+   "fieldtype": "Select",
+   "label": "Version 3CX",
+   "options": "V20\nV18",
+   "default": "V20",
+   "description": "V20 : transcription, résumé IA et lien d'enregistrement transmis lors de la journalisation."
+  },
+  {
+   "fieldname": "pbx_column_break",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "client_id",
+   "fieldtype": "Data",
+   "label": "Client ID (API 3CX)",
+   "description": "Requis uniquement pour la synchro XAPI, l'écoute des enregistrements et le click-to-call par API (V20, licence Enterprise / 8SC+). Console 3CX > Intégrations > API."
+  },
+  {
+   "fieldname": "client_secret",
+   "fieldtype": "Password",
+   "label": "Clé API (client secret)"
+  },
+  {
+   "fieldname": "crm_section",
+   "fieldtype": "Section Break",
+   "label": "Template CRM (identification et journalisation)",
+   "description": "Ces options sont lues à chaque appel de 3CX : pas besoin de régénérer le template quand on les modifie."
+  },
+  {
+   "fieldname": "match_digits",
+   "fieldtype": "Int",
+   "label": "Chiffres comparés",
+   "default": "9",
+   "description": "Nombre de chiffres de fin comparés pour reconnaître un numéro (9 en France : 06 12 34 56 78 = +33 6 12 34 56 78)."
+  },
+  {
+   "fieldname": "lookup_contacts",
+   "fieldtype": "Check",
+   "label": "Rechercher dans les Contacts",
+   "default": "1"
+  },
+  {
+   "fieldname": "lookup_leads",
+   "fieldtype": "Check",
+   "label": "Rechercher dans les Prospects",
+   "default": "1"
+  },
+  {
+   "fieldname": "contact_url_target",
+   "fieldtype": "Select",
+   "label": "Fiche ouverte depuis 3CX",
+   "options": "Contact\nTiers lié (Client/Fournisseur)",
+   "default": "Contact",
+   "description": "Fiche ERP ouverte quand on clique sur le contact dans 3CX (ou automatiquement à la réponse, selon le réglage du client 3CX)."
+  },
+  {
+   "fieldname": "crm_column_break",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "allow_contact_creation",
+   "fieldtype": "Check",
+   "label": "Autoriser la création de contacts depuis 3CX",
+   "default": "1"
+  },
+  {
+   "fieldname": "log_calls",
+   "fieldtype": "Check",
+   "label": "Journaliser les appels",
+   "default": "1"
+  },
+  {
+   "fieldname": "log_unmatched_calls",
+   "fieldtype": "Check",
+   "label": "Journaliser aussi les appels de numéros inconnus",
+   "default": "0"
+  },
+  {
+   "fieldname": "log_chats",
+   "fieldtype": "Check",
+   "label": "Journaliser les conversations (live chat, SMS, WhatsApp)",
+   "default": "1"
+  },
+  {
+   "fieldname": "click_section",
+   "fieldtype": "Section Break",
+   "label": "Click-to-call"
+  },
+  {
+   "fieldname": "click_to_call_mode",
+   "fieldtype": "Select",
+   "label": "Mode",
+   "options": "Désactivé\nLien tel:\nAPI Call Control",
+   "default": "Lien tel:",
+   "description": "« Lien tel: » : l'appel est lancé par l'application 3CX ou l'extension navigateur 3CX installée sur le poste (toutes versions). « API Call Control » : le PBX fait sonner le poste de l'utilisateur puis compose le numéro (V20, licence Enterprise, poste renseigné dans la fiche Utilisateur)."
+  },
+  {
+   "fieldname": "click_column_break",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "call_timeout",
+   "fieldtype": "Int",
+   "label": "Délai de sonnerie (s)",
+   "default": "30",
+   "depends_on": "eval:doc.click_to_call_mode=='API Call Control'"
+  },
+  {
+   "fieldname": "notify_section",
+   "fieldtype": "Section Break",
+   "label": "Notification d'appel entrant"
+  },
+  {
+   "fieldname": "notify_incoming_calls",
+   "fieldtype": "Check",
+   "label": "Afficher une notification à l'arrivée d'un appel",
+   "default": "0",
+   "description": "Dès que 3CX identifie l'appelant, une notification avec un lien vers la fiche s'affiche dans l'ERP pour les utilisateurs ayant coché « Notification des appels entrants 3CX » dans leur fiche Utilisateur. 3CX ne transmet pas le poste qui va décrocher à ce moment : tous ces utilisateurs sont notifiés."
+  },
+  {
+   "fieldname": "sync_section",
+   "fieldtype": "Section Break",
+   "label": "Synchronisation de l'historique (XAPI)"
+  },
+  {
+   "fieldname": "xapi_sync_enabled",
+   "fieldtype": "Check",
+   "label": "Activer la synchronisation",
+   "default": "0",
+   "description": "Toutes les 15 minutes, importe le journal d'appels 3CX (y compris appels non identifiés), avec transcription, résumé et score de sentiment quand ils existent. Complète les appels déjà journalisés par le template CRM."
+  },
+  {
+   "fieldname": "sync_lookback_hours",
+   "fieldtype": "Int",
+   "label": "Profondeur de la première synchro (heures)",
+   "default": "24"
+  },
+  {
+   "fieldname": "sync_column_break",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_sync",
+   "fieldtype": "Datetime",
+   "label": "Dernière synchronisation",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-11-14 17:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ThreeCX",
+ "name": "ThreeCX Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
