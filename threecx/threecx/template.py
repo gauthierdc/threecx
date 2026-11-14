@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 import frappe
 
 API = "[ErpUrl]/api/method/threecx.api.crm"
-TEMPLATE_VERSION = "1"
+TEMPLATE_VERSION = "2"
 
 # Sorties d'une correspondance de contact -> chemin dans la réponse Frappe.
 CONTACT_VARIABLES = {
@@ -82,11 +82,13 @@ def build_template(erp_url: str, version: str = "V20") -> str:
 	ET.SubElement(crm, "Number", {"Prefix": "AsIs", "MaxLength": ""})
 	ET.SubElement(crm, "Connection", {"MaxConcurrentRequests": "4"})
 
+	# Forme exacte des templates exportés par le générateur 3CX (groupe et libellés ASCII, tous
+	# les attributs présents) : sinon la console V20 n'affiche pas les champs à remplir.
 	parameters = ET.SubElement(crm, "Parameters")
 	for name, type_, title, default in (
-		("ErpUrl", "String", "URL de l'ERP", erp_url),
-		("ApiKey", "String", "Clé API (API Key de l'utilisateur ERP)", ""),
-		("ApiSecret", "Password", "Secret API (API Secret de l'utilisateur ERP)", ""),
+		("ErpUrl", "String", "ERP URL", erp_url),
+		("ApiKey", "String", "ERP API Key", ""),
+		("ApiSecret", "Password", "ERP API Secret", ""),
 	):
 		ET.SubElement(
 			parameters,
@@ -94,10 +96,15 @@ def build_template(erp_url: str, version: str = "V20") -> str:
 			{
 				"Name": name,
 				"Type": type_,
-				"Parent": "Connexion à l'ERP",
+				"Parent": "General Configuration",
 				"Editor": "String",
 				"Title": title,
 				"Default": default,
+				"Validation": "",
+				"ListValues": "",
+				"RequestUrl": "",
+				"RequestUrlParameters": "",
+				"ResponseScenario": "",
 			},
 		)
 
